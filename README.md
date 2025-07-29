@@ -41,10 +41,10 @@ Green 1: (455, 287)
 ## 📂 Project Structure
 ```bash
 dobot-color-sorting/
-├── calibration.py             # Main control script
-├── main.py           # Handles video capture and color detection
-├── mode1.py    # Sends commands to the Dobot arm
-├── mode2.py            # Utility functions for color masking, etc.
+├── main.py             # Main control script
+├── calibration.py      # Set a start and stop position   
+├── mode1.py            # Sends commands to the Dobot arm
+├── mode2.py            # Handles video capture and color detection 
 ├── README.md           # Project description
 ```
 
