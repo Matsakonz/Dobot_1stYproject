@@ -7,7 +7,7 @@ import numpy as np
 
 posi = {}
 
-device = Dobot("/dev/ttyUSB1")
+device = Dobot("/dev/ttyUSB0")
 print("Nong are connecting succesfull as USB0 port.")
 
 calibration = input("Do you want o calibration (y/n) : ")
@@ -21,7 +21,7 @@ with open('positionvision.json', 'r') as file:
 
 # Convert lists back to tuples
 x = [tuple(lst) for lst in my_list_as_lists]
-home, posiup_l, posimiddle_l, posilow_l, posiup_r, posimiddle_r, posilow_r = x[0], x[1], x[2], x[3], x[4], x[5], x[6]
+home, posiup_l, posimiddle_l, posilow_l, posiup_r, posiup_2r, posimiddle_r, posilow_r = x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]
 
 
 # Define color ranges for blue, yellow, red, and green in HSV
@@ -33,7 +33,7 @@ color_ranges = {
 }
 
 # Open a video capture or read an image
-cap = cv.VideoCapture(4)  # Change to a file path if using an image or video file
+cap = cv.VideoCapture(0)  # Change to a file path if using an image or video file
 
 # Initialize a flag to determine when to save data
 save_data = False
@@ -152,18 +152,22 @@ for lst in f:
 def checktarget():
     # check target
     if int(y2[:-1]) == int(rup):
-        device.move_to(float(posiup_r[0]), float(posiup_r[1]), float(posiup_r[2])-(float(posiup_r[2])*h)-(10*h), 0.0)
+        device.move_to(float(posiup_r[0]), float(posiup_r[1]), float(posiup_r[2])-(float(posiup_r[2])*h*0.9)-(15*h), 0.0)
         device.suck(False)
-        device.move_to(float(posiup_r[0]), float(posiup_r[1]), float(posiup_r[2])-(float(posiup_r[2])*h), 0.0)
-    if int(y2[:-1]) == int(rmiddle):
-        device.move_to(float(posimiddle_r[0]), float(posimiddle_r[1]), float(posimiddle_r[2])-(float(posimiddle_r[2])*h)-(10*h), 0.0)
+        device.move_to(float(posiup_r[0]), float(posiup_r[1]), float(posiup_r[2])-(float(posiup_r[2])*h*0.9), 0.0)
+    elif int(y2[:-1]) == int(r2up):
+        device.move_to(float(posiup_2r[0]), float(posiup_2r[1]), float(posiup_2r[2])-(float(posiup_2r[2])*h*0.9)-(15*h), 0.0)
         device.suck(False)
-        device.move_to(float(posimiddle_r[0]), float(posimiddle_r[1]), float(posimiddle_r[2])-(float(posimiddle_r[2])*h), 0.0)
-    if int(y2[:-1]) == int(rlow):
-        device.move_to(float(posilow_r[0]), float(posilow_r[1]), float(posilow_r[2])-(float(posilow_r[2])*h)-(10*h), 0.0)
+        device.move_to(float(posiup_2r[0]), float(posiup_2r[1]), float(posiup_2r[2])-(float(posiup_2r[2])*h*0.9), 0.0)
+    elif int(y2[:-1]) == int(rmiddle):
+        device.move_to(float(posimiddle_r[0]), float(posimiddle_r[1]), float(posimiddle_r[2])-(float(posimiddle_r[2])*h*0.9)-(15*h), 0.0)
         device.suck(False)
-        device.move_to(float(posilow_r[0]), float(posilow_r[1]), float(posilow_r[2])-(float(posilow_r[2])*h), 0.0)
-    device.move_to(float(home[0]),float(home[1]),float(home[2])-(float(home[2])*h),0)
+        device.move_to(float(posimiddle_r[0]), float(posimiddle_r[1]), float(posimiddle_r[2])-(float(posimiddle_r[2])*h*0.9), 0.0)
+    elif int(y2[:-1]) == int(rlow):
+        device.move_to(float(posilow_r[0]), float(posilow_r[1]), float(posilow_r[2])-(float(posilow_r[2])*h*0.9)-(15*h), 0.0)
+        device.suck(False)
+        device.move_to(float(posilow_r[0]), float(posilow_r[1]), float(posilow_r[2])-(float(posilow_r[2])*h*0.9), 0.0)
+    device.move_to(float(home[0]),float(home[1]),float(home[2])-(float(home[2])*h*0.9),0)
 def checkposition(posi):
     check1 = []
     check2 = []
@@ -176,10 +180,10 @@ def checkposition(posi):
     check1.sort()
     check2.sort()
     lup, lmiddle, llow = check1[0], check1[1], check1[2]
-    rup, rmiddle, rlow = check2[0], check2[1], check2[2]
-    return lup, lmiddle, llow, rup, rmiddle, rlow
+    rup, r2up, rmiddle, rlow = check2[0], check2[1], check2[2], check2[3]
+    return lup, lmiddle, llow, rup, r2up, rmiddle, rlow
 
-lup, lmiddle, llow, rup, rmiddle, rlow = checkposition(posi)
+lup, lmiddle, llow, rup, r2up, rmiddle, rlow = checkposition(posi)
 
 origin = ""
 for key in posi.keys():
@@ -193,30 +197,30 @@ for key in posi.keys():
         h = int(key[-1])-1
         if int(y1[:-1]) == int(lup):
             device.move_to(float(home[0]),float(home[1]),float(home[2]),0)
-            device.move_to(float(posiup_l[0]), float(posiup_l[1]), float(posiup_l[2])+20, 0.0)
+            device.move_to(float(posiup_l[0]), float(posiup_l[1]), float(posiup_l[2])+40, 0.0)
             device.suck(True)
             device.move_to(float(posiup_l[0]), float(posiup_l[1]), float(posiup_l[2]), 0.0)
-            device.move_to(float(posiup_l[0]), float(posiup_l[1]), float(posiup_l[2])+20, 0.0)
+            device.move_to(float(posiup_l[0]), float(posiup_l[1]), float(posiup_l[2])+40, 0.0)
             # check target
             checktarget()
 
             device.move_to(float(home[0]),float(home[1]),float(home[2]),0)
         elif int(y1[:-1]) == int(lmiddle):
             device.move_to(float(home[0]),float(home[1]),float(home[2]),0)
-            device.move_to(float(posimiddle_l[0]), float(posimiddle_l[1]), float(posimiddle_l[2])+20, 0.0)
+            device.move_to(float(posimiddle_l[0]), float(posimiddle_l[1]), float(posimiddle_l[2])+40, 0.0)
             device.suck(True)
             device.move_to(float(posimiddle_l[0]), float(posimiddle_l[1]), float(posimiddle_l[2]), 0.0)
-            device.move_to(float(posimiddle_l[0]), float(posimiddle_l[1]), float(posimiddle_l[2])+20, 0.0)
+            device.move_to(float(posimiddle_l[0]), float(posimiddle_l[1]), float(posimiddle_l[2])+40, 0.0)
             # check target
             checktarget()
             
             device.move_to(float(home[0]),float(home[1]),float(home[2]),0)
         elif int(y1[:-1]) == int(llow):
             device.move_to(float(home[0]),float(home[1]),float(home[2]),0)
-            device.move_to(float(posilow_l[0]), float(posilow_l[1]), float(posilow_l[2])+20, 0.0)
+            device.move_to(float(posilow_l[0]), float(posilow_l[1]), float(posilow_l[2])+40, 0.0)
             device.suck(True)
             device.move_to(float(posilow_l[0]), float(posilow_l[1]), float(posilow_l[2]), 0.0)
-            device.move_to(float(posilow_l[0]), float(posilow_l[1]), float(posilow_l[2])+20, 0.0)
+            device.move_to(float(posilow_l[0]), float(posilow_l[1]), float(posilow_l[2])+40, 0.0)
             # check target
             checktarget()
             
