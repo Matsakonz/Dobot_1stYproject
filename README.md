@@ -90,7 +90,5 @@ You can modify the HSV range in mode2.py to adjust or add more colors:
 **Matsakon T.**
 Robotics Engineering Student | Automation Enthusiast
 
----
-
 ## 📄 License
 This project is open-source and available under the MIT License.
