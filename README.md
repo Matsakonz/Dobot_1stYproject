@@ -91,4 +91,4 @@ You can modify the HSV range in mode2.py to adjust or add more colors:
 Robotics Engineering Student | Automation Enthusiast
 
 ## 📄 License
-This project is open-source and available under the MIT License.
+This project is licensed under the [WTFPL](http://www.wtfpl.net/about/) – Do What the F*ck You Want to Public License.
