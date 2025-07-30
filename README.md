@@ -1,4 +1,4 @@
-# 🎯 Dobot Arm Color Sorting Robot
+# 🤖 Dobot Arm Color Sorting Robot
 
 This project demonstrates an automated **color sorting robot** using a **Dobot robotic arm** and **OpenCV (cv2)**. The system detects objects of different colors (e.g., red, blue, yellow) using a camera, counts them, and commands the Dobot to move and sort the objects into separate areas based on their color.
 
@@ -40,7 +40,7 @@ Green 1: (455, 287)
 
 ## 📂 Project Structure
 ```bash
-dobot-color-sorting/
+Dobot_1stYproject/
 ├── main.py             # Main control script
 ├── calibration.py      # Set a start and stop position   
 ├── mode1.py            # Sends commands to the Dobot arm
